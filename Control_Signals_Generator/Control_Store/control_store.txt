@@ -1,0 +1,34 @@
+R_src_out, MAR_in, RD
+R_src_out, MAR_in, RD, ALU_inc, Z_in
+R_src_out, ALU_dec, Z_in
+PC_out, MAR_in, RD, ALU_inc, Z_in
+R_dst_out, Y_in
+R_src_out, SRC_in
+Z_out, PC_in
+MDR_out, Y_in
+R_dst_out, ALU_add, Z_in
+Z_out, MAR_in, RD
+Z_out, MAR_in, R_dst_in, RD
+Z_out, R_dst_in
+SRC_out, R_dst_in
+PC_out, Y_in
+IR_out, ALU_add, Z_in
+Z_out, PC_in
+Z_out, R_dst_in
+Z_out, MDR_in, WR
+PC_out, MAR_in, RD, ALU_inc, Z_in
+Z_out, PC_in
+MDR_out, IR_in
+SRC_clear
+SRC_out, ALU_op, Z_in
+
+MDR_out, Y_in
+MDR_out, MAR_in, RD
+SRC_out, MDR_in, WR
+MDR_out, MAR_in
+MDR_out, SRC_in
+
+
+
+ 
+
