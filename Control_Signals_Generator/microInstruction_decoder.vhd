@@ -5,11 +5,13 @@ USE IEEE.math_real.all;
 ENTITY micro_Instruction_decoder IS
 
 	PORT(	
-	     	micro_instruction  : IN std_logic_vector(19 DOWNTO 0);
-		BO0, BO1, BO2, BO3, BO4, next_address_enable, IR_decoder_enable : OUT std_logic;
+	     	micro_instruction  : IN std_logic_vector(19 DOWNTO 0);	
+		next_location_bits : OUT std_logic_vector(2 DOWNTO 0);
+		--BO0, BO1, BO2, BO3, BO4, next_address_enable, IR_decoder_enable : OUT std_logic;
             	PC_out, MDR_out, Z_out, R_src_out, R_dst_out, SRC_out, IR_out  : OUT std_logic;
 		PC_in, MDR_in, Z_in, R_src_in, R_dst_in, SRC_in, IR_in, MAR_in, Y_in : OUT std_logic;
-		ALU_inc, ALU_dec, ALU_add, ALU_op : OUT std_logic;
+		ALU_bits : OUT std_logic_vector(1 DOWNTO 0);
+		--ALU_inc, ALU_dec, ALU_add, ALU_op : OUT std_logic;
 		RD, WR, SRC_clear : OUT std_logic;
 		next_address : OUT std_logic_vector(4 DOWNTO 0)
 	    );
@@ -40,10 +42,12 @@ BEGIN
 	Group0: next_address <= micro_instruction(19 DOWNTO 15);
 	
 	-- Group 1 => How to get the next address
-	Group1:   decoder GENERIC MAP(selection_line_width => 3) 
-				PORT MAP('1', micro_instruction(14 DOWNTO 12), output => group1_decoder_output);
-	(no_operation, next_address_enable, IR_decoder_enable, BO4, BO3, BO2, BO1, BO0) <= group1_decoder_output;
+	--Group1:   decoder GENERIC MAP(selection_line_width => 3) 
+	--			PORT MAP('1', micro_instruction(14 DOWNTO 12), output => group1_decoder_output);
+	--(no_operation, next_address_enable, IR_decoder_enable, BO4, BO3, BO2, BO1, BO0) <= group1_decoder_output;
 	
+	Group1: next_location_bits <= micro_instruction(14 DOWNTO 12);
+
 	-- Group 2 => out Signals
 	Group2:   decoder GENERIC MAP(selection_line_width => 3) 
 				PORT MAP('1', micro_instruction(11 DOWNTO 9), group2_decoder_output);
@@ -60,9 +64,10 @@ BEGIN
 	(no_operation, group4_dummy, R_dst_in, Z_in)  <= group4_decoder_output;
 
 	-- Group 5 => Alu Operations
-	Group5:   decoder GENERIC MAP(selection_line_width => 2) 
-				PORT MAP('1', micro_instruction(3 DOWNTO 2), group5_decoder_output);
-	(ALU_op, ALU_add, ALU_dec, ALU_inc) <= group5_decoder_output;
+	--Group5:   decoder GENERIC MAP(selection_line_width => 2) 
+	--			PORT MAP('1', micro_instruction(3 DOWNTO 2), group5_decoder_output);
+	--(ALU_op, ALU_add, ALU_dec, ALU_inc) <= group5_decoder_output;
+	Group5: ALU_bits <= micro_instruction(3 DOWNTO 2);
 
 	-- Group 6 => Memory Signals & Extra signal to clear the SRC register
 	Group6:   decoder GENERIC MAP(selection_line_width => 2) 
