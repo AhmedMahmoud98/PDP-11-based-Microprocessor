@@ -1,0 +1,26 @@
+2 mov X(R7) R0 0
+-3 N 1
+2 xnor R1 R1 2
+2 mov (R7)+ R3 3
+-2 20 4
+0 label3 5
+2 mov -(R3) X(R7) 5
+-3 M 6
+1 dec R0 7
+2 cmp (R7)+ @R3 8
+-2 18 9
+4 bhi label1 10
+2 mov (R7)+ @R3 11
+-2 18 12
+0 label1 13
+1 dec R0 13
+4 beq label2 14
+1 inc R3 15
+0 label2 16
+4 br label3 16
+2 and X(R0) R1 17
+-2 100 18
+2 xnor @X(R4) X(R7) 19
+-2 10 20
+-3 N 21
+5 hlt 22

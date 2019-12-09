@@ -1,0 +1,33 @@
+; comments starts with a semi colon
+;this code doesn’t do anything significant, it is just an example
+
+MOV N, R0				; R0 = 7           	address 0			0000110111000000
+					;											0000000000000000
+XNOR R1, R1				; R1 = 0           	address 2			0111000001000001
+MOV #20, R3				; R3 = 20         	address 3			0000010111000011
+					;											0000000000010100
+				; memory is word addressable, so there isno
+				; problem in having odd addresses, why?
+Label3:             ;                       address 5
+MOV -(R3), M		;   M = 5  , R3= 19  	address 5			0000100011110111
+					;											0000000000000001
+DEC R0              ;   R0 = 6      		address 7			1010000001000000
+CMP #18, @R3        ;   C=1,N=1     		address 8 			1000010111001011
+					;											0000000000010010
+BHI Label1          ;   Not taken   		address 10			1011010100000010
+MOV  #18,@R3        ;   M=18    			address 11			0000010111001011
+					;											0000000000010010
+Label1: 				;   				address 13
+DEC R0				;   R0=5				address 13 			1010000001000000
+BEQ Label2			;   not taken			address 14			1011000100000001
+INC R3				;   R3=20				address 15			1010000000000011
+Label2: 				;  					address 16
+BR Label3				;  					address 16			1011000011110100
+and 100(R0),R1			;					address 17			0101110000000001
+					;											0000000001100100
+xnor @10(R4),N			;					address 19			0100111100110111
+					;											0000000000001010
+					;											0000000000000000
+HLT						;					address 22			1100000000000000
+Define  N  7			;					address 23
+Define M  5				;					address 24
