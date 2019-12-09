@@ -17,6 +17,7 @@ END ENTITY decoder;
 
 ARCHITECTURE decoder_arch of decoder IS
 BEGIN
-	output <= (to_integer(unsigned(selection_lines))=> '1', others=>'0'); -- The selection lines are the index of the output bit that should be set.
+    -- The selection lines are the index of the output bit that should be set.
+	output <= (to_integer(unsigned(selection_lines))=> '1', others=>'0') WHEN enable = '1' ELSE (OTHERS => '0') ; 
 
 END decoder_arch;
