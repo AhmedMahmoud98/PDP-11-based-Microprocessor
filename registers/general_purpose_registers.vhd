@@ -10,13 +10,13 @@ ENTITY general_purpose_registers IS
 	);
 END ENTITY general_purpose_registers;
 
-ARCHITECTURE general_purpose_registers OF general_purpose_registers IS
+ARCHITECTURE general_purpose_registers_arch OF general_purpose_registers IS
 	COMPONENT buffered_reg IS
 		GENERIC (size : integer := 16);
 		PORT(CLK, RST, in_enable, out_enable : IN std_logic;
 			 D : IN std_logic_vector(size-1 DOWNTO 0);
 			 Q : OUT std_logic_vector(size-1 DOWNTO 0));
-    END COMPONENT;
+	END COMPONENT;
 	
 	COMPONENT decoder IS
 		GENERIC (selection_line_width : integer := 2);
