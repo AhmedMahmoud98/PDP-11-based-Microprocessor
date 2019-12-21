@@ -6,7 +6,6 @@ ENTITY branch_address IS
     GENERIC (address_width : INTEGER := 5);
     PORT (
         branch_opcode : IN std_logic_vector(2 DOWNTO 0);
-        branch_address : IN std_logic_vector(address_width - 1 DOWNTO 0);
         zero_flag, carry_flag, is_nop : IN std_logic;
         address : OUT std_logic_vector(address_width - 1 DOWNTO 0)
     );
@@ -34,7 +33,7 @@ ARCHITECTURE branch_address_operation OF branch_address IS
     SIGNAL is_condition_satisfied : std_logic;
 BEGIN
     mux_input(0) <= "10010"; -- fetch addresss
-    mux_input(1) <= branch_address; -- branch address
+    mux_input(1) <= "01101"; -- branch address
     condition : branch_condition PORT MAP(branch_opcode, zero_flag, carry_flag, is_condition_satisfied);
     branch_mux : mux GENERIC MAP(
         selection_line_width => 1, bus_width => address_width) PORT MAP('1',

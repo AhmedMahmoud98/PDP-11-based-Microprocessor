@@ -29,7 +29,6 @@ ARCHITECTURE ir_decoder_operation OF ir_decoder IS
 		GENERIC (address_width : INTEGER := 5);
 		PORT (
 			branch_opcode : IN std_logic_vector(2 DOWNTO 0);
-			branch_address : IN std_logic_vector(address_width - 1 DOWNTO 0);
 			zero_flag, carry_flag, is_nop : IN std_logic;
 			address : OUT std_logic_vector(address_width - 1 DOWNTO 0)
 		);
@@ -62,8 +61,7 @@ BEGIN
 		IR(11 DOWNTO 9);
 	u0 : branch_address GENERIC MAP(
 		address_width => address_width) PORT MAP(
-		IR(11 DOWNTO 9),
-		IR(7 DOWNTO (7 - address_width + 1))
+		IR(11 DOWNTO 9)
 		, zero_flag, carry_flag, is_nop, branch_address_output);
 
 	u1 : address_mode_based GENERIC MAP(
