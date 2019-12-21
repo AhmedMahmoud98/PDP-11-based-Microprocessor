@@ -54,8 +54,6 @@ begin
         elsif (Op(opcode-3 downto 0) = "110") then  --xnor
           ALU_Result(N-1 downto 0) <= A xnor B;
           ALU_Result(N) <= '0';
-        else
-          ALU_Result <= (others => 'X');
         end if;
       elsif(Op(opcode-1 downto opcode-2) = "01") then
         if (Op(opcode-3 downto 0) = "000") then  --inv
@@ -79,7 +77,7 @@ begin
         elsif (Op(opcode-3 downto 0) = "110") then --ROL
           ALU_Result(N-1 downto 0) <= A(N-2 downto 0) & A(N-1);
           ALU_Result(N) <= '0';
-        elsif (Op(opcode-3 downto 0) = "111") then  --RCL
+        else  --RCL
           ALU_Result(N-1 downto 0) <= A(N-2 downto 0) & Cin;
           ALU_Result(N) <= '0';
         end if;
