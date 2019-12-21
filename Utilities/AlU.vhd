@@ -102,7 +102,9 @@ begin
         else '0';                                                                               --carry flag
  f(1) <= '0' when ALU_Result(N-1) = '0' else '1';                                               --sign flag
  f(2) <= '1' when ALU_Result(N-1 downto 0) = (ALU_Result(N-1 downto 0)'range => '0') else '0';  --zero flag
- f(3) <= '1' when ALU_Result(N) = '1' else '0';                                                 --overflow flag
+ f(3) <= '1' when ALU_Result(N) = '1' 
+        else (f(1) xor f(0)) when (Op = "01001" or Op = "01010" or Op = "01011" or Op = "01100" or Op = "01101" or Op = "01110" or Op = "01111")
+        else '0';                                                                               --overflow flag
  f(4) <= '1' when ALU_Result(0) = '0' else '0';                                                 --parity flag
  C <= (others => 'X') when (sel = "11" and Op = "00000111") else ALU_Result(N-1 downto 0);      -- ALU out
  flags <= f;
