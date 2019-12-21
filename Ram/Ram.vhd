@@ -17,7 +17,9 @@ ENTITY RAM IS
 END ENTITY RAM;
 
 ARCHITECTURE RAM_arch OF RAM IS
-	SIGNAL RAM_data : bus_array(RAM_size - 1 DOWNTO 0)(word_size - 1 DOWNTO 0);
+	SIGNAL RAM_data : bus_array(0 TO RAM_size - 1)(word_size - 1 DOWNTO 0) :=
+		(0 => X"A801",
+		 OTHERS => X"0000");
 
 -------------------------------------------------------------------------------------------------------------------
 	-- Initialise the RAM from text file 	
@@ -39,7 +41,7 @@ ARCHITECTURE RAM_arch OF RAM IS
 	END FUNCTION init_RAM;
 -------------------------------------------------------------------------------------------------------------------
 BEGIN
-init: RAM_data <= init_RAM;
+--init: RAM_data <= init_RAM;
  
 PROCESS(CLK) IS
 	BEGIN

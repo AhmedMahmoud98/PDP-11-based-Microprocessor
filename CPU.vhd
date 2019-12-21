@@ -125,6 +125,13 @@ ARCHITECTURE CPU_arch OF CPU IS
 		);
 	END COMPONENT;
 
+	
+	COMPONENT Micro_AR_reg IS
+		PORT(CLK, RST, enable : IN std_logic;
+			 D : IN std_logic_vector(4 DOWNTO 0);
+			 Q : OUT std_logic_vector(4 DOWNTO 0));
+	END COMPONENT;
+
 	SIGNAL control_store_address, wide_branch_address, next_address : std_logic_vector(4 DOWNTO 0);
 	SIGNAL next_location_bits : std_logic_vector(2 DOWNTO 0);
 	SIGNAL PC_out, MDR_out, Z_out, R_src_out, R_dst_out, SRC_out, IR_out : std_logic;
@@ -138,10 +145,10 @@ ARCHITECTURE CPU_arch OF CPU IS
 	SIGNAL read_from_selection_line, write_to_selection_line : std_logic_vector(selection_line_width - 1 DOWNTO 0);
 	SIGNAL flag_register_data : std_logic_vector(4 DOWNTO 0);
 	SIGNAL R_src, R_dst : std_logic_vector(2 DOWNTO 0);
-
+	SIGNAL micro_AR_data: std_logic_vector(4 DOWNTO 0);
 BEGIN
 	u0 : control_signals PORT MAP(
-		control_store_address,
+		micro_AR_data,
 		next_location_bits,
 		PC_out, MDR_out, Z_out, R_src_out, R_dst_out, SRC_out, IR_out,
 		PC_in, MDR_in, Z_in, R_src_in, R_dst_in, SRC_in, IR_in, MAR_in, Y_in,
@@ -230,6 +237,12 @@ BEGIN
 		IR_data,
 		is_MOV, is_SRC, is_CMP,
 		control_store_address
+	);
+
+	Micro_AR:  Micro_AR_reg PORT MAP
+		     ( CLK, RST, '1', 
+		       control_store_address,
+		       micro_AR_data
 	);
 
 END;
