@@ -9,7 +9,7 @@ ENTITY special_purpose_registers IS
 		 memory_data_in: IN std_logic_vector(bus_width-1 DOWNTO 0);
 		 flag_register_data_in: IN std_logic_vector(flags-1 DOWNTO 0);
 		 data_bus: INOUT std_logic_vector(bus_width-1 DOWNTO 0);
-		 memory_address_out, memory_data_out, IR_data, flag_register:  OUT std_logic_vector(bus_width-1 DOWNTO 0);
+		 memory_address_out, memory_data_out, IR_data:  OUT std_logic_vector(bus_width-1 DOWNTO 0);
 		 zero_flag, carry_flag: OUT std_logic
 	);
 END ENTITY special_purpose_registers;
@@ -75,7 +75,7 @@ BEGIN
 	IR_address_out(bus_width-1 DOWNTO bus_width/2) <= (OTHERS => '0');
 	IR_address_out_buffer: tristate GENERIC MAP (bus_width => bus_width) PORT MAP (IRout, IR_address_out, data_bus);
 	-- Flag Register
-	FR: reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, '1', flag_register_data_in, flag_register_data_out); 
+	FR: reg GENERIC MAP (size => flags) PORT MAP (CLK, RST, '1', flag_register_data_in, flag_register_data_out); 
 	zero_flag <= flag_register_data_out(2);
 	carry_flag <= flag_register_data_out(0);
 END;
