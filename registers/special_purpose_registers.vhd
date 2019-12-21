@@ -5,11 +5,11 @@ USE work.bus_array_pkg.all;
 ENTITY special_purpose_registers IS
 	GENERIC (bus_width : integer := 16;
 			 flags: integer := 5);
-	PORT(CLK, RST, MDRin, MDRout, MARin, Rd, PCin, PCout, IRin, IRout : IN std_logic;
-		 memory_data_in: IN std_logic_vector(bus_width-1 DOWNTO 0);
+	PORT(CLK, RST, MDRin, MDRout, MARin, Rd, PCin, PCout, IRin, IRout, SRCin, SRCout, Zin, Zout, Yin : IN std_logic;
+		 memory_data_in, Z_data_in: IN std_logic_vector(bus_width-1 DOWNTO 0);
 		 flag_register_data_in: IN std_logic_vector(flags-1 DOWNTO 0);
 		 data_bus: INOUT std_logic_vector(bus_width-1 DOWNTO 0);
-		 memory_address_out, memory_data_out, IR_data:  OUT std_logic_vector(bus_width-1 DOWNTO 0);
+		 memory_address_out, memory_data_out, IR_data, Y_data:  OUT std_logic_vector(bus_width-1 DOWNTO 0);
 		 zero_flag, carry_flag: OUT std_logic
 	);
 END ENTITY special_purpose_registers;
@@ -78,4 +78,9 @@ BEGIN
 	FR: reg GENERIC MAP (size => flags) PORT MAP (CLK, RST, '1', flag_register_data_in, flag_register_data_out); 
 	zero_flag <= flag_register_data_out(2);
 	carry_flag <= flag_register_data_out(0);
+	-- ALU Registers
+	Y: reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, Yin, data_bus, Y_data);
+	Z: buffered_reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, Zin, Zout, Z_data_in, data_bus);
+	-- Temp Register (SRC)
+	SRC_reg: buffered_reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, SRCin, SRCout, data_bus, data_bus);
 END;
