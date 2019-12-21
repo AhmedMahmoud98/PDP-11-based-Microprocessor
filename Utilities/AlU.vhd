@@ -29,64 +29,64 @@ begin
       ALU_Result <= std_logic_vector(signed('0' & A)+signed('0' & B)); 
     else    --operation
       if(Op(opcode-1 downto opcode-2) = "00") then--2 operand
-        if (Op = "00000") then  -- SUB,CMP
+        if (Op(opcode-3 downto 0) = "000") then  -- SUB,CMP
           ALU_Result <= std_logic_vector(signed('0' & A)-signed('0' & B));
-        elsif (Op = "00001") then  -- ADD
+        elsif (Op(opcode-3 downto 0) = "001") then  -- ADD
           ALU_Result <= std_logic_vector(signed('0' & A)+signed('0' & B));
-        elsif (Op = "00010") then  --ADC
+        elsif (Op(opcode-3 downto 0) = "010") then  --ADC
           if(Cin = '1') then
             ALU_Result <= std_logic_vector(signed('0' & A)+signed('0' & B)+1);
           else
             ALU_Result <= std_logic_vector(signed('0' & A)+signed('0' & B));
           end if;
-        elsif (Op = "00011") then --SBC
+        elsif (Op(opcode-3 downto 0) = "011") then --SBC
           if(Cin = '1') then
             ALU_Result <= std_logic_vector(signed('0' & A)-signed('0' & B)-1);
           else
             ALU_Result <= std_logic_vector(signed('0' & A)-signed('0' & B));
           end if;
-        elsif (Op = "00100") then  --and 
+        elsif (Op(opcode-3 downto 0) = "100") then  --and 
           ALU_Result(N-1 downto 0) <= A and B;
           ALU_Result(N) <= '0';
-        elsif (Op = "00101") then  -- or
+        elsif (Op(opcode-3 downto 0) = "101") then  -- or
           ALU_Result(N-1 downto 0) <= A or B;
           ALU_Result(N) <= '0';
-        elsif (Op = "00110") then  --xnor
+        elsif (Op(opcode-3 downto 0) = "110") then  --xnor
           ALU_Result(N-1 downto 0) <= A xnor B;
           ALU_Result(N) <= '0';
         else
           ALU_Result <= (others => 'X');
         end if;
       elsif(Op(opcode-1 downto opcode-2) = "01") then
-        if (Op = "01000") then  --inv
+        if (Op(opcode-3 downto 0) = "000") then  --inv
           ALU_Result(N-1 downto 0) <= not A;
           ALU_Result(N) <= '0';
-        elsif (Op = "01001") then  --lsr
+        elsif (Op(opcode-3 downto 0) = "001") then  --lsr
           ALU_Result(N-1 downto 0) <= '0' & A(N-1 downto 1);
           ALU_Result(N) <= '0';
-        elsif (Op = "01010") then  --ror
+        elsif (Op(opcode-3 downto 0) = "010") then  --ror
           ALU_Result(N-1 downto 0) <= A(0) & A(N-1 downto 1);
           ALU_Result(N) <= '0';
-        elsif (Op = "01011") then  --RRC
+        elsif (Op(opcode-3 downto 0) = "011") then  --RRC
           ALU_Result(N-1 downto 0) <= Cin & A(N-1 downto 1);
           ALU_Result(N) <= '0';
-        elsif (Op = "01100") then --ASR
+        elsif (Op(opcode-3 downto 0) = "100") then --ASR
           ALU_Result(N-1 downto 0) <= A(N-1) & A(N-1 downto 1);
           ALU_Result(N) <= '0';
-        elsif (Op = "01101") then--lsl 
+        elsif (Op(opcode-3 downto 0) = "101") then--lsl 
           ALU_Result(N-1 downto 0) <= A(N-2 downto 0) & '0';
           ALU_Result(N) <= '0';
-        elsif (Op = "01110") then --ROL
+        elsif (Op(opcode-3 downto 0) = "110") then --ROL
           ALU_Result(N-1 downto 0) <= A(N-2 downto 0) & A(N-1);
           ALU_Result(N) <= '0';
-        elsif (Op = "01111") then  --RCL
+        elsif (Op(opcode-3 downto 0) = "111") then  --RCL
           ALU_Result(N-1 downto 0) <= A(N-2 downto 0) & Cin;
           ALU_Result(N) <= '0';
         end if;
       elsif(Op(opcode-1 downto opcode-2) = "10") then
-        if (Op = "10000") then  -- INC
+        if (Op(opcode-3 downto 0) = "000") then  -- INC
           ALU_Result <= std_logic_vector(signed('0' & B)+1); 
-        elsif (Op = "10001") then   --DEC
+        elsif (Op(opcode-3 downto 0) = "001") then   --DEC
           ALU_Result <= std_logic_vector(signed('0' & B)-1);
         else
           ALU_Result <= (others => 'X');
