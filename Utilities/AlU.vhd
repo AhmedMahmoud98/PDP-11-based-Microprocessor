@@ -99,6 +99,6 @@ begin
         else (f(1) xor f(0)) when (sel = "11" and (Op = "01001" or Op = "01010" or Op = "01011" or Op = "01100" or Op = "01101" or Op = "01110" or Op = "01111"))
         else '0' when sel = "11";                                                                               --overflow flag
  f(4) <= '1' when ALU_Result(0) = '0' and sel = "11" else '0' when sel = "11";                                                 --parity flag
- C <= ALU_Result(N-1 downto 0) when (sel = "11");     -- ALU out
+ C <= ALU_Result(N-1 downto 0);    -- ALU out
  flags <= f;
 end Behavioral;
