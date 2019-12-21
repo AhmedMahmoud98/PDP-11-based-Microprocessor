@@ -90,16 +90,18 @@ ARCHITECTURE CPU_arch OF CPU IS
 	END COMPONENT;
 
 	COMPONENT address_generator IS
-		GENERIC (control_address_width: integer:= 5;
-				 bit_orings: integer:= 5;
-				 bus_width: integer := 16;
-				 selection_line_width: integer := 3);
-		PORT (next_address_field: IN std_logic_vector(control_address_width-1 DOWNTO 0);
-			  IR_decoder_address: IN std_logic_vector(control_address_width-1 DOWNTO 0);
-			  address_selection_lines: IN std_logic_vector(selection_line_width-1 DOWNTO 0);
-			  IR: IN std_logic_vector(bus_width-1 DOWNTO 0);
-			  MOV, SRC_IN, CMP, RST: IN std_logic;
-			  next_microinstruction_address: OUT std_logic_vector(control_address_width-1 DOWNTO 0)
+		GENERIC (
+			control_address_width : INTEGER := 5;
+			bit_orings : INTEGER := 5;
+			bus_width : INTEGER := 16;
+			selection_line_width : INTEGER := 3);
+		PORT (
+			next_address_field : IN std_logic_vector(control_address_width - 1 DOWNTO 0);
+			IR_decoder_address : IN std_logic_vector(control_address_width - 1 DOWNTO 0);
+			address_selection_lines : IN std_logic_vector(selection_line_width - 1 DOWNTO 0);
+			IR : IN std_logic_vector(bus_width - 1 DOWNTO 0);
+			MOV, SRC_IN, CMP : IN std_logic;
+			next_microinstruction_address : OUT std_logic_vector(control_address_width - 1 DOWNTO 0)
 		);
 	END COMPONENT;
 
@@ -226,7 +228,7 @@ BEGIN
 		wide_branch_address,
 		next_location_bits,
 		IR_data,
-		is_MOV, is_SRC, is_CMP, RST,
+		is_MOV, is_SRC, is_CMP,
 		control_store_address
 	);
 
