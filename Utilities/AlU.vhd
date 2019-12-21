@@ -98,7 +98,7 @@ begin
  end process;
  f(0) <= A(N-1) when (sel = "11" and Op = "01111") 
         else A(0) when (sel = "11" and Op = "01011")
-        else ALU_Result(N) when (Op = "00000" or Op = "00001" or Op = "00010" or Op = "00011" or Op = "10000" or Op = "10001")
+        else ALU_Result(N) when (sel = "00" or sel = "01" or sel = "10" or Op = "00000" or Op = "00001" or Op = "00010" or Op = "00011" or Op = "10000" or Op = "10001")
         else '0';                                                                               --carry flag
  f(1) <= '0' when ALU_Result(N-1) = '0' else '1';                                               --sign flag
  f(2) <= '1' when ALU_Result(N-1 downto 0) = (ALU_Result(N-1 downto 0)'range => '0') else '0';  --zero flag
