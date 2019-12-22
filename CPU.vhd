@@ -17,7 +17,7 @@ ARCHITECTURE CPU_arch OF CPU IS
 			bus_width : INTEGER := 16;
 			selection_line_width : INTEGER := 3);
 		PORT (
-			CLK, RST, in_enable, out_enable : IN std_logic;
+			CLK, RST, in_enable, out_enable, PCin, PCout : IN std_logic;
 			out_selection_line, in_selection_line : IN std_logic_vector(selection_line_width - 1 DOWNTO 0);
 			data_bus : INOUT std_logic_vector(bus_width - 1 DOWNTO 0)
 		);
@@ -28,7 +28,7 @@ ARCHITECTURE CPU_arch OF CPU IS
 			bus_width : INTEGER := 16;
 			flags : INTEGER := 5);
 		PORT (
-			CLK, RST, MDRin, MDRout, MARin, Rd, PCin, PCout, IRin, IRout, SRCin, SRCout, Zin, Zout, Yin : IN std_logic;
+			CLK, RST, MDRin, MDRout, MARin, Rd, IRin, IRout, SRCin, SRCout, SRCclear, Zin, Zout, Yin : IN std_logic;
 			memory_data_in, Z_data_in : IN std_logic_vector(bus_width - 1 DOWNTO 0);
 			flag_register_data_in : IN std_logic_vector(flags - 1 DOWNTO 0);
 			data_bus : INOUT std_logic_vector(bus_width - 1 DOWNTO 0);
@@ -160,8 +160,8 @@ BEGIN
 	u1 : special_purpose_registers GENERIC MAP(
 		bus_width => bus_width,
 		flags => 5) PORT MAP(
-		CLK, RST, MDR_in, MDR_out, MAR_in, RD, PC_in, PC_out, IR_in, IR_out,
-		SRC_in, SRC_out, Z_in, Z_out, Y_in,
+		CLK, RST, MDR_in, MDR_out, MAR_in, RD, IR_in, IR_out,
+		SRC_in, SRC_out, SRC_clear, Z_in, Z_out, Y_in,
 		memory_to_MDR, Z_data,
 		flag_register_data,
 		data_bus,
@@ -189,7 +189,7 @@ BEGIN
 		bus_width => bus_width,
 		selection_line_width => selection_line_width)
 	PORT MAP(
-		CLK, RST, write_to_register_enable, read_from_register_enable,
+		CLK, RST, write_to_register_enable, read_from_register_enable, PC_in, PC_out,
 		read_from_selection_line, write_to_selection_line,
 		data_bus
 	);

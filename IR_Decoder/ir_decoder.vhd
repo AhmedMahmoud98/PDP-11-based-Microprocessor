@@ -56,9 +56,9 @@ BEGIN
 	is_src <= NOT is_1_op OR is_clr;
 	is_branch <= IR(15) AND NOT IR(14) AND IR(13) AND IR(12); -- "1011"
 	address_mode <=
-		IR(5 DOWNTO 3) WHEN is_1_op
+		IR(3) & IR(5 DOWNTO 4) WHEN is_1_op
 		ELSE
-		IR(11 DOWNTO 9);
+		IR(9) & IR(11 DOWNTO 10);
 	u0 : branch_address GENERIC MAP(
 		address_width => address_width) PORT MAP(
 		IR(11 DOWNTO 9)
