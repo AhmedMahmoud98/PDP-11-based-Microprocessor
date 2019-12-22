@@ -1,5 +1,6 @@
 ; comments starts with a semi colon
 ;this code doesn’t do anything significant, it is just an example
+mov 12,R0
 
 MOV N, R0				; R0 = 7           	address 0			0000110111000000
 					;											0000000000000000

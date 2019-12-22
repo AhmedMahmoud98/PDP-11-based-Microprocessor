@@ -68,8 +68,8 @@ void preProcess()
     branch["bls"]="1011"+to_binary(4,3)+"0";
     branch["bhi"]="1011"+to_binary(5,3)+"0";
     branch["bhs"]="1011"+to_binary(6,3)+"0";
-    others["hlt"]="1100"+to_binary(1,12);
-    others["nop"]="1100"+to_binary(0,12);
+    others["hlt"]="1100100000000000";
+    others["nop"]="1100000000000000";
 }
 string oneOperand_opcode(string s)
 {
@@ -138,7 +138,14 @@ pair<string,int> check_mode(string &s)
         s = "(R7)+";
         return {process(tmp.substr(1)),-2};
     }
-    //absolute
+    //absolute 2 
+    int num = s[0]-'0';
+    if(num >=0  && num<10)
+    {
+        s = "@(R7)+";
+        return {tmp , -4};
+    }
+    //absolute 1
     s = "X(R7)";
     return {tmp,-3};
 }
@@ -168,7 +175,7 @@ void process_other_operations(string operation,ofstream&out)
 int main()
 {
     preProcess();
-    ifstream in("input.txt");
+    ifstream in("test.txt");
     ofstream out("output.txt");
     // ofstream op("opcodes.txt");
     // ofstream mem("memory.txt");
@@ -312,7 +319,7 @@ int main()
             }
             ram<<to_binary(512 + vars[var].first - commands[i].second.second - 1,16)<<endl;
         }
-        else if(mode == -2)
+        else if(mode == -2 || mode == -4)
             ram<<to_binary(stoi(commands[i].second.first[0]),16)<<endl;
         line++;
     }
