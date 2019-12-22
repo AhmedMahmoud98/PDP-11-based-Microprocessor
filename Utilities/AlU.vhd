@@ -83,9 +83,9 @@ begin
         end if;
       elsif(Op(opcode-1 downto opcode-2) = "10") then
         if (Op(opcode-3 downto 0) = "000") then  -- INC
-          ALU_Result <= std_logic_vector(signed('0' & B)+1); 
+          ALU_Result <= std_logic_vector(signed('0' & A)+1); 
         elsif (Op(opcode-3 downto 0) = "001") then   --DEC
-          ALU_Result <= std_logic_vector(signed('0' & B)-1);
+          ALU_Result <= std_logic_vector(signed('0' & A)-1);
         end if;
       end if;
     end if;

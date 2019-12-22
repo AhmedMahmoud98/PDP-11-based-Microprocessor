@@ -9,11 +9,11 @@ END ENTITY Micro_AR_reg;
 
 ARCHITECTURE Micro_AR_reg_arch OF Micro_AR_reg IS
 BEGIN
-	PROCESS(CLK, RST)
+	PROCESS(CLK, RST, enable)
 	BEGIN
 		IF(RST = '1') THEN
 			Q <= "10010";
-		ELSIF enable = '1' AND falling_edge(CLK) THEN
+		ELSIF enable = '1' AND rising_edge(CLK) THEN
 			Q <= D;
 		END IF;
 	END PROCESS;

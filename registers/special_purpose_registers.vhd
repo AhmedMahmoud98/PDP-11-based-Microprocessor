@@ -29,6 +29,13 @@ ARCHITECTURE special_purpose_registers_arch OF special_purpose_registers IS
 			 Q : OUT std_logic_vector(size-1 DOWNTO 0));
 	END COMPONENT;
 	
+	COMPONENT IR_reg IS
+		GENERIC (size : integer := 16);
+		PORT(CLK, RST, enable : IN std_logic;
+			 D : IN std_logic_vector(size-1 DOWNTO 0);
+			 Q : OUT std_logic_vector(size-1 DOWNTO 0));
+	END COMPONENT;
+	
 	COMPONENT mux IS
 		GENERIC (selection_line_width : integer := 2;
 				 bus_width: integer := 16);
@@ -65,11 +72,11 @@ BEGIN
 	MDR: reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, MDR_in_enable, MDR_data_in, memory_data_out);
 	MDR_out_buffer: tristate GENERIC MAP (bus_width =>bus_width) PORT MAP (MDRout, memory_data_out, data_bus);
 	-- MAR
-	MAR: reg GENERIC MAP(size => bus_width) PORT MAP (CLK, RST, MARin, data_bus, memory_address_out);
+	MAR: IR_reg GENERIC MAP(size => bus_width) PORT MAP (CLK, RST, MARin, data_bus, memory_address_out);
 	-- PC
 	PC: buffered_reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, PCin, PCout, data_bus, data_bus);
 	-- IR 
-	IR: reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, IRin, data_bus, IR_data);
+	IR: IR_reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, IRin, data_bus, IR_data);
 	-- IR Address Out
 	IR_address_out((bus_width/2)-1 DOWNTO 0) <= IR_data((bus_width/2)-1 DOWNTO 0);
 	IR_address_out(bus_width-1 DOWNTO bus_width/2) <= (OTHERS => '0');

@@ -19,6 +19,8 @@ END ENTITY RAM;
 ARCHITECTURE RAM_arch OF RAM IS
 	SIGNAL RAM_data : bus_array(0 TO RAM_size - 1)(word_size - 1 DOWNTO 0) :=
 		(0 => X"A801",
+		 1 => X"A802",
+		 2 => X"1042",
 		 OTHERS => X"0000");
 
 -------------------------------------------------------------------------------------------------------------------
