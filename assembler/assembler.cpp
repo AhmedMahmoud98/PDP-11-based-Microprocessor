@@ -41,35 +41,35 @@ void preProcess()
         modes["X(R"+to_string(i)+")"]=to_binary(6,3)+to_binary(i,3);    //indexed direct
         modes["@X(R"+to_string(i)+")"]=to_binary(7,3)+to_binary(i,3);   //indexed indirect
     }
-    oneOperand["inc"]="1010"+to_binary(0,6);
-    oneOperand["dec"]="1010"+to_binary(1,6);
-    oneOperand["clr"]="1010"+to_binary(2,6);
-    oneOperand["inv"]="1010"+to_binary(3,6);
-    oneOperand["lsr"]="1010"+to_binary(4,6);
-    oneOperand["ror"]="1010"+to_binary(5,6);
-    oneOperand["rrc"]="1010"+to_binary(6,6);
-    oneOperand["asr"]="1010"+to_binary(7,6);
-    oneOperand["lsl"]="1010"+to_binary(8,6);
-    oneOperand["rol"]="1010"+to_binary(9,6);
-    oneOperand["rlc"]="1010"+to_binary(10,6);
-    twoOperand["mov"] =to_binary(0,4);
+    oneOperand["inc"]="1010"+to_binary(16,5)+"0";
+    oneOperand["dec"]="1010"+to_binary(17,5)+"0";
+    oneOperand["clr"]="1010"+to_binary(31,5)+"0";
+    oneOperand["inv"]="1010"+to_binary(8,5)+"0";
+    oneOperand["lsr"]="1010"+to_binary(9,5)+"0";
+    oneOperand["ror"]="1010"+to_binary(10,5)+"0";
+    oneOperand["rrc"]="1010"+to_binary(11,5)+"0";
+    oneOperand["asr"]="1010"+to_binary(12,5)+"0";
+    oneOperand["lsl"]="1010"+to_binary(13,5)+"0";
+    oneOperand["rol"]="1010"+to_binary(14,5)+"0";
+    oneOperand["rlc"]="1010"+to_binary(15,5)+"0";
+    twoOperand["mov"] =to_binary(9,4);
     twoOperand["add"] =to_binary(1,4);
     twoOperand["adc"] =to_binary(2,4);
-    twoOperand["sub"] =to_binary(3,4);
-    twoOperand["sbc"] =to_binary(4,4);
-    twoOperand["and"] =to_binary(5,4);
-    twoOperand["or"]  =to_binary(6,4);
-    twoOperand["xnor"]=to_binary(7,4);
+    twoOperand["sub"] =to_binary(0,4);
+    twoOperand["sbc"] =to_binary(3,4);
+    twoOperand["and"] =to_binary(4,4);
+    twoOperand["or"]  =to_binary(5,4);
+    twoOperand["xnor"]=to_binary(6,4);
     twoOperand["cmp"] =to_binary(8,4);
-    branch["br"] ="1011"+to_binary(0,4);
-    branch["beq"]="1011"+to_binary(1,4);
-    branch["bne"]="1011"+to_binary(2,4);
-    branch["blo"]="1011"+to_binary(3,4);
-    branch["bls"]="1011"+to_binary(4,4);
-    branch["bhi"]="1011"+to_binary(5,4);
-    branch["bhs"]="1011"+to_binary(6,4);
-    others["hlt"]="1100"+to_binary(0,12);
-    others["nop"]="1100"+to_binary(1,12);
+    branch["br"] ="1011"+to_binary(0,3)+"0";
+    branch["beq"]="1011"+to_binary(1,3)+"0";
+    branch["bne"]="1011"+to_binary(2,3)+"0";
+    branch["blo"]="1011"+to_binary(3,3)+"0";
+    branch["bls"]="1011"+to_binary(4,3)+"0";
+    branch["bhi"]="1011"+to_binary(5,3)+"0";
+    branch["bhs"]="1011"+to_binary(6,3)+"0";
+    others["hlt"]="1100"+to_binary(1,12);
+    others["nop"]="1100"+to_binary(0,12);
 }
 string oneOperand_opcode(string s)
 {
@@ -170,8 +170,9 @@ int main()
     preProcess();
     ifstream in("input.txt");
     ofstream out("output.txt");
-    ofstream op("opcodes.txt");
-    ofstream mem("memory.txt");
+    // ofstream op("opcodes.txt");
+    // ofstream mem("memory.txt");
+    ofstream ram("Ram.txt");
     string s;
     //get adresses
     while(getline(in,s))
@@ -225,7 +226,7 @@ int main()
             s = process(s.substr(second_space+1));
             lower(var);
             vars[var]={var_address++,stoi(s)};
-            vars_to_memory.push_back(to_binary(stoi(s),32));
+            vars_to_memory.push_back(to_binary(stoi(s),16));
             continue;
         } 
         commands.push_back({0,{vector<string>(),address}});
@@ -273,12 +274,8 @@ int main()
             commands.push_back({op2.second,{vector<string>(1,op2.first),++address}}),idx++;
         address++;
     }
-    //write variables to memory
-    for(auto var:vars_to_memory)
-    {
-        mem << var <<endl;
-    }
 
+    int line = 0;
     //process code
     for(int i=0;i<commands.size();i++)
     {
@@ -286,10 +283,12 @@ int main()
         for(int j=0;j<commands[i].second.first.size();j++) out<<commands[i].second.first[j]<<" ";
         out<<commands[i].second.second<<endl;
         int mode=commands[i].first;
+        if(mode == 0)   //label
+            continue;
         if(mode == 1)   //one operand
-            process_one_operand(commands[i].second.first[0],commands[i].second.first[1],op);
+            process_one_operand(commands[i].second.first[0],commands[i].second.first[1],ram);
         else if(mode == 2)  //two operand
-            process_two_operand(commands[i].second.first[0],commands[i].second.first[1],commands[i].second.first[2],op);
+            process_two_operand(commands[i].second.first[0],commands[i].second.first[1],commands[i].second.first[2],ram);
         else if(mode == 4)
         {
             int cur_address=commands[i].second.second;
@@ -298,10 +297,10 @@ int main()
                 cout<<"Error label not found\n";
                 return 0;
             }
-            process_branch_operand(commands[i].second.first[0],labels[commands[i].second.first[1]]-cur_address-1,op);
+            process_branch_operand(commands[i].second.first[0],labels[commands[i].second.first[1]]-cur_address-1,ram);
         }
         else if(mode == 5)
-            process_other_operations(commands[i].second.first[0],op);
+            process_other_operations(commands[i].second.first[0],ram);
         else if(mode == -3)
         {
             string var=commands[i].second.first[0];
@@ -311,13 +310,33 @@ int main()
                 cout<<"Error , variable not found"<<endl;
                 return 0;
             }
-            op<<to_binary(vars[var].first,16)<<endl;
+            ram<<to_binary(512 + vars[var].first - commands[i].second.second - 1,16)<<endl;
         }
         else if(mode == -2)
-            op<<to_binary(stoi(commands[i].second.first[0]),16)<<endl;
+            ram<<to_binary(stoi(commands[i].second.first[0]),16)<<endl;
+        line++;
     }
+    while(line < 512)  
+    {
+        ram << to_binary(0,16)<<endl;
+        line++;
+    }
+    //write variables to memory
+    for(auto var:vars_to_memory)
+    {
+        ram << var <<endl;
+        line++;
+    }
+    while(line<2048)
+    {
+        ram << to_binary(0,16)<<endl;
+        line++;
+    }
+    // stack pointer at 2047
+    // code segment from 0 to 511 , data segment from 512 to 1023 , stack segment from 1024 to 2047
     in.close();
-    op.close();
-    mem.close();
+    // op.close();
+    // mem.close();
     out.close();
+    ram.close();
 }

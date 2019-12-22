@@ -77,28 +77,29 @@ begin
         elsif (Op(opcode-3 downto 0) = "110") then --ROL
           ALU_Result(N-1 downto 0) <= A(N-2 downto 0) & A(N-1);
           ALU_Result(N) <= '0';
-        else  --RCL
+        else                                        --RCL
           ALU_Result(N-1 downto 0) <= A(N-2 downto 0) & Cin;
           ALU_Result(N) <= '0';
         end if;
       elsif(Op(opcode-1 downto opcode-2) = "10") then
         if (Op(opcode-3 downto 0) = "000") then  -- INC
-          ALU_Result <= std_logic_vector(signed('0' & B)+1); 
+          ALU_Result <= std_logic_vector(signed('0' & A)+1); 
         elsif (Op(opcode-3 downto 0) = "001") then   --DEC
-          ALU_Result <= std_logic_vector(signed('0' & B)-1);
+          ALU_Result <= std_logic_vector(signed('0' & A)-1);
         end if;
       end if;
     end if;
  end process;
- f(0) <= A(N-1) when (sel = "11" and Op = "01111") 
-        else A(0) when (sel = "11" and Op = "01011")
+ f(0) <= A(N-1) when (sel = "11" and (Op = "01111" or Op = "01110"))                   --ROR , RRC
+        else A(0) when (sel = "11" and (Op = "01011" or Op = "01010" or Op = "01100")) --ROL , RCL , ASR
+        else '0'  when (sel = "11" and (Op = "01101" or Op = "01001"))                 --LSL , LSR
         else ALU_Result(N) when (sel = "11" and (Op = "00000" or Op = "00001" or Op = "00010" or Op = "00011" or Op = "10000" or Op = "10001"));
- f(1) <= '0' when (ALU_Result(N-1) = '0' and sel = "11") else '1' when (ALU_Result(N-1) = '1' and sel = "11");                                               --sign flag
+ f(1) <= '0' when (ALU_Result(N-1) = '0' and sel = "11") else '1' when (ALU_Result(N-1) = '1' and sel = "11");                   --sign flag
  f(2) <= '1' when (ALU_Result(N-1 downto 0) = (ALU_Result(N-1 downto 0)'range => '0') and sel = "11") else '0' when sel = "11";  --zero flag
  f(3) <= '1' when ALU_Result(N) = '1' and sel = "11"
         else (f(1) xor f(0)) when (sel = "11" and (Op = "01001" or Op = "01010" or Op = "01011" or Op = "01100" or Op = "01101" or Op = "01110" or Op = "01111"))
         else '0' when sel = "11";                                                                               --overflow flag
- f(4) <= '1' when ALU_Result(0) = '0' and sel = "11" else '0' when sel = "11";                                                 --parity flag
+ f(4) <= '1' when ALU_Result(0) = '0' and sel = "11" else '0' when sel = "11";                                  --parity flag
  C <= ALU_Result(N-1 downto 0);    -- ALU out
  flags <= f;
 end Behavioral;
