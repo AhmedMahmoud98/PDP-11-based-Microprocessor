@@ -5,7 +5,7 @@ USE work.bus_array_pkg.all;
 ENTITY special_purpose_registers IS
 	GENERIC (bus_width : integer := 16;
 			 flags: integer := 5);
-	PORT(CLK, RST, MDRin, MDRout, MARin, Rd, PCin, PCout, IRin, IRout, SRCin, SRCout, Zin, Zout, Yin : IN std_logic;
+	PORT(CLK, RST, MDRin, MDRout, MARin, Rd, IRin, IRout, SRCin, SRCout, SRCclear, Zin, Zout, Yin : IN std_logic;
 		 memory_data_in, Z_data_in: IN std_logic_vector(bus_width-1 DOWNTO 0);
 		 flag_register_data_in: IN std_logic_vector(flags-1 DOWNTO 0);
 		 data_bus: INOUT std_logic_vector(bus_width-1 DOWNTO 0);
@@ -23,6 +23,13 @@ ARCHITECTURE special_purpose_registers_arch OF special_purpose_registers IS
 	END COMPONENT;
 	
 	COMPONENT reg IS
+		GENERIC (size : integer := 16);
+		PORT(CLK, RST, enable : IN std_logic;
+			 D : IN std_logic_vector(size-1 DOWNTO 0);
+			 Q : OUT std_logic_vector(size-1 DOWNTO 0));
+	END COMPONENT;
+	
+	COMPONENT falling_edge_reg IS
 		GENERIC (size : integer := 16);
 		PORT(CLK, RST, enable : IN std_logic;
 			 D : IN std_logic_vector(size-1 DOWNTO 0);
@@ -65,11 +72,9 @@ BEGIN
 	MDR: reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, MDR_in_enable, MDR_data_in, memory_data_out);
 	MDR_out_buffer: tristate GENERIC MAP (bus_width =>bus_width) PORT MAP (MDRout, memory_data_out, data_bus);
 	-- MAR
-	MAR: reg GENERIC MAP(size => bus_width) PORT MAP (CLK, RST, MARin, data_bus, memory_address_out);
-	-- PC
-	PC: buffered_reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, PCin, PCout, data_bus, data_bus);
+	MAR: falling_edge_reg GENERIC MAP(size => bus_width) PORT MAP (CLK, RST, MARin, data_bus, memory_address_out);
 	-- IR 
-	IR: reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, IRin, data_bus, IR_data);
+	IR: falling_edge_reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, IRin, data_bus, IR_data);
 	-- IR Address Out
 	IR_address_out((bus_width/2)-1 DOWNTO 0) <= IR_data((bus_width/2)-1 DOWNTO 0);
 	IR_address_out(bus_width-1 DOWNTO bus_width/2) <= (OTHERS => '0');
@@ -82,5 +87,5 @@ BEGIN
 	Y: reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, Yin, data_bus, Y_data);
 	Z: buffered_reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, Zin, Zout, Z_data_in, data_bus);
 	-- Temp Register (SRC)
-	SRC_reg: buffered_reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, SRCin, SRCout, data_bus, data_bus);
+	SRC_reg: buffered_reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST or SRCclear, SRCin, SRCout, data_bus, data_bus);
 END;
