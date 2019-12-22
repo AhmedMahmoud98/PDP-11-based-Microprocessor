@@ -19,9 +19,9 @@ END ENTITY RAM;
 ARCHITECTURE RAM_arch OF RAM IS
 -------------------------------------------------------------------------------------------------------------------
 	-- Initialise the RAM from text file 	
-	SUBTYPE function_output is bus_array(RAM_size - 1 DOWNTO 0)(word_size - 1 DOWNTO 0);
+	SUBTYPE function_output is bus_array(0 TO RAM_size - 1)(word_size - 1 DOWNTO 0);
   	IMPURE FUNCTION init_RAM RETURN function_output is
-		VARIABLE RAM_content : bus_array(RAM_size - 1 DOWNTO 0)(word_size - 1 DOWNTO 0);
+		VARIABLE RAM_content : bus_array(0 TO RAM_size - 1)(word_size - 1 DOWNTO 0);
 		VARIABLE text_line : line;
 		VARIABLE count: integer;
 		File RAM_file: TEXT open READ_MODE is "Ram.txt";

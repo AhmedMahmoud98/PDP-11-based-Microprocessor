@@ -48,10 +48,10 @@ BEGIN
 	hlt_nop <= IR(15) AND IR(14) AND NOT IR(13) AND NOT IR(13);
 	is_nop <= hlt_nop AND NOT IR(11);
 	is_hlt <= hlt_nop AND IR(11);
-	is_mov <= IR(15) AND NOT IR(14) AND NOT IR(13) AND IR(12); -- 1001
 	is_1_op <= IR(15) AND NOT IR(14) AND IR(13) AND NOT IR(12);
 	is_2_op <= NOT IR(15) OR is_mov OR is_cmp;
 	is_clr <= is_1_op AND IR(11) AND IR(10) AND IR(9) AND IR(8) AND IR(7); -- 11111
+	is_mov <= is_clr or (IR(15) AND NOT IR(14) AND NOT IR(13) AND IR(12)); -- 1001
 	is_cmp <= IR(15) AND NOT IR(14) AND NOT IR(13) AND NOT IR(12); -- 1000
 	is_src <= NOT is_1_op OR is_clr;
 	is_branch <= IR(15) AND NOT IR(14) AND IR(13) AND IR(12); -- "1011"
