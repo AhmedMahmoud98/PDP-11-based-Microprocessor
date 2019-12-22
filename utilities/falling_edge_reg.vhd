@@ -1,14 +1,14 @@
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.all;
 
-ENTITY IR_reg IS
+ENTITY falling_edge_reg IS
 	GENERIC (size : integer := 16);
 	PORT(CLK, RST, enable : IN std_logic;
 		 D : IN std_logic_vector(size-1 DOWNTO 0);
 		 Q : OUT std_logic_vector(size-1 DOWNTO 0));
-END ENTITY IR_reg;
+END ENTITY falling_edge_reg;
 
-ARCHITECTURE IR_reg_arch OF IR_reg IS
+ARCHITECTURE IR_reg_arch OF falling_edge_reg IS
 BEGIN
 	PROCESS(CLK, RST, enable)
 	BEGIN

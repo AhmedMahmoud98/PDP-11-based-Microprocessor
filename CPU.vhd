@@ -115,11 +115,10 @@ ARCHITECTURE CPU_arch OF CPU IS
 
 	COMPONENT register_selector IS
 		GENERIC (
-			output_size : INTEGER := 3;
-			selection_line_width : INTEGER := 3);
+			reg_selector_size : INTEGER := 3);
 		PORT (
 			Rsrc_in, Rsrc_out, Rdst_in, Rdst_out : IN std_logic;
-			Rsrc, Rdst : IN std_logic_vector(output_size - 1 DOWNTO 0);
+			Rsrc, Rdst : IN std_logic_vector(reg_selector_size - 1 DOWNTO 0);
 			R_in_enable, R_out_enable : OUT std_logic;
 			R_in_selector, R_out_selector : OUT std_logic_vector(selection_line_width - 1 DOWNTO 0)
 		);
@@ -216,8 +215,7 @@ BEGIN
 	);
 
 	u7 : register_selector GENERIC MAP(
-		output_size => 3,
-		selection_line_width => 3)
+		reg_selector_size => 3)
 	PORT MAP(
 		R_src_in, R_src_out, R_dst_in, R_dst_out,
 		R_src, R_dst,
