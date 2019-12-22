@@ -4,7 +4,7 @@ USE work.bus_array_pkg.all;
 
 ENTITY register_selector IS
 	GENERIC (reg_selector_size : integer := 3);
-	PORT (Rsrc_in, Rsrc_out, Rdst_in, Rdst_out: IN std_logic;
+	PORT (Rsrc_in, Rsrc_out, Rdst_in, Rdst_out, is_SRC: IN std_logic;
 		  Rsrc, Rdst: IN std_logic_vector(reg_selector_size-1 DOWNTO 0);
 		  R_in_enable, R_out_enable: OUT std_logic;
 		  R_in_selector, R_out_selector: OUT std_logic_vector(reg_selector_size-1 DOWNTO 0)
@@ -29,13 +29,13 @@ BEGIN
 	R_in_enable <= Rsrc_in or Rdst_in;
 	R_out_enable <= Rsrc_out or Rdst_out;
 	-- Reg_in
-	in_mux_select(0) <= Rsrc_in;
+	in_mux_select(0) <= is_SRC;
 	in_mux_input(0) <= Rdst;
 	in_mux_input(1) <= Rsrc;
 	in_mux: mux GENERIC MAP (selection_line_width => 1, bus_width => reg_selector_size)
 				PORT MAP (R_in_enable, in_mux_select, in_mux_input, R_in_selector); 
 	-- Reg_out
-	out_mux_select(0) <= Rsrc_out;
+	out_mux_select(0) <= is_SRC;
 	out_mux_input(0) <= Rdst;
 	out_mux_input(1) <= Rsrc;
 	out_mux: mux GENERIC MAP (selection_line_width => 1, bus_width => reg_selector_size)
