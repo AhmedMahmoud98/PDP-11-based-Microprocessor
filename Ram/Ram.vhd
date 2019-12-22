@@ -17,11 +17,6 @@ ENTITY RAM IS
 END ENTITY RAM;
 
 ARCHITECTURE RAM_arch OF RAM IS
-	SIGNAL RAM_data : bus_array(0 TO RAM_size - 1)(word_size - 1 DOWNTO 0) :=
-		(0 => X"95C0",
-		 1 => X"AFAF",
-		 OTHERS => X"0000");
-
 -------------------------------------------------------------------------------------------------------------------
 	-- Initialise the RAM from text file 	
 	SUBTYPE function_output is bus_array(RAM_size - 1 DOWNTO 0)(word_size - 1 DOWNTO 0);
@@ -41,9 +36,8 @@ ARCHITECTURE RAM_arch OF RAM IS
   		 RETURN RAM_content;
 	END FUNCTION init_RAM;
 -------------------------------------------------------------------------------------------------------------------
+SIGNAL RAM_data : bus_array(0 TO RAM_size - 1)(word_size - 1 DOWNTO 0) := init_RAM;
 BEGIN
---init: RAM_data <= init_RAM;
- 
 PROCESS(CLK) IS
 	BEGIN
 	IF rising_edge(CLK) THEN  
