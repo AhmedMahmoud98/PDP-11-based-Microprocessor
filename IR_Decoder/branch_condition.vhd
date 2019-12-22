@@ -27,10 +27,14 @@ BEGIN
     branch_conditions(0)(0) <= '1';
     branch_conditions(1)(0) <= zero_flag;
     branch_conditions(2)(0) <= NOT zero_flag;
-    branch_conditions(3)(0) <= NOT carry_flag;
-    branch_conditions(4)(0) <= NOT carry_flag OR zero_flag;
-    branch_conditions(5)(0) <= carry_flag;
-    branch_conditions(6)(0) <= carry_flag OR zero_flag;
+    --branch_conditions(3)(0) <= NOT carry_flag;
+    --branch_conditions(4)(0) <= NOT carry_flag OR zero_flag;
+    --branch_conditions(5)(0) <= carry_flag;
+    --branch_conditions(6)(0) <= carry_flag OR zero_flag;
+	branch_conditions(3)(0) <= carry_flag;
+    branch_conditions(4)(0) <= carry_flag OR zero_flag;
+    branch_conditions(5)(0) <= (NOT carry_flag) AND (NOT zero_flag);
+    branch_conditions(6)(0) <= NOT carry_flag;
     u0 : mux GENERIC MAP(selection_line_width => 3, bus_width => 1) PORT MAP('1', branch_opcode, branch_conditions, mux_output);
     condition_satisfied <= mux_output(0);
 END branch_condition_operation;

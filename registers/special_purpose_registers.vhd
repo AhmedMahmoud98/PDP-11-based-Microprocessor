@@ -84,7 +84,7 @@ BEGIN
 	IR: falling_edge_reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, IRin, data_bus, IR_data);
 	-- IR Address Out
 	IR_address_out((bus_width/2)-1 DOWNTO 0) <= IR_data((bus_width/2)-1 DOWNTO 0);
-	IR_address_out(bus_width-1 DOWNTO bus_width/2) <= (OTHERS => '0');
+	IR_address_out(bus_width-1 DOWNTO bus_width/2) <= (OTHERS => IR_data((bus_width/2)-1));
 	IR_address_out_buffer: tristate GENERIC MAP (bus_width => bus_width) PORT MAP (IRout, IR_address_out, data_bus);
 	-- Flag Register
 	FR: reg GENERIC MAP (size => flags) PORT MAP (CLK, RST, '1', flag_register_data_in, flag_register_data_out); 
