@@ -13,7 +13,7 @@ Label3:             ;                       address 5
 MOV -(R3), M		;   M = 5  , R3= 19  	address 5			0000100011110111
 					;											0000000000000001
 DEC R0              ;   R0 = 6      		address 7			1010000001000000
-CMP #18, @R3        ;   C=1,N=1     		address 8 			1000010111001011
+CMP #18, @R3        ;   C=0,N=0     		address 8 			1000010111001011
 					;											0000000000010010
 BHI Label1          ;   Not taken   		address 10			1011010100000010
 MOV  #18,@R3        ;   M=18    			address 11			0000010111001011

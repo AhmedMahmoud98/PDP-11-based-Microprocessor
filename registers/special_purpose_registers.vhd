@@ -36,6 +36,13 @@ ARCHITECTURE special_purpose_registers_arch OF special_purpose_registers IS
 			 Q : OUT std_logic_vector(size-1 DOWNTO 0));
 	END COMPONENT;
 	
+	COMPONENT MDR_reg IS
+		GENERIC (size : integer := 16);
+		PORT(CLK, RST, enable, is_falling : IN std_logic;
+			 D : IN std_logic_vector(size-1 DOWNTO 0);
+			 Q : OUT std_logic_vector(size-1 DOWNTO 0));
+	END COMPONENT;
+	
 	COMPONENT mux IS
 		GENERIC (selection_line_width : integer := 2;
 				 bus_width: integer := 16);
@@ -69,7 +76,7 @@ BEGIN
 	-- MDR
 	MDR_input_MUX: mux GENERIC MAP(selection_line_width => 1, bus_width => bus_width) 
 					   PORT MAP (MDR_in_enable, MDR_input_mux_select, MDR_input_mux_input, MDR_data_in); 
-	MDR: reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, MDR_in_enable, MDR_data_in, memory_data_out);
+	MDR: MDR_reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, MDR_in_enable, MDRin, MDR_data_in, memory_data_out);
 	MDR_out_buffer: tristate GENERIC MAP (bus_width =>bus_width) PORT MAP (MDRout, memory_data_out, data_bus);
 	-- MAR
 	MAR: falling_edge_reg GENERIC MAP(size => bus_width) PORT MAP (CLK, RST, MARin, data_bus, memory_address_out);
@@ -77,7 +84,7 @@ BEGIN
 	IR: falling_edge_reg GENERIC MAP (size => bus_width) PORT MAP (CLK, RST, IRin, data_bus, IR_data);
 	-- IR Address Out
 	IR_address_out((bus_width/2)-1 DOWNTO 0) <= IR_data((bus_width/2)-1 DOWNTO 0);
-	IR_address_out(bus_width-1 DOWNTO bus_width/2) <= (OTHERS => '0');
+	IR_address_out(bus_width-1 DOWNTO bus_width/2) <= (OTHERS => IR_data((bus_width/2)-1));
 	IR_address_out_buffer: tristate GENERIC MAP (bus_width => bus_width) PORT MAP (IRout, IR_address_out, data_bus);
 	-- Flag Register
 	FR: reg GENERIC MAP (size => flags) PORT MAP (CLK, RST, '1', flag_register_data_in, flag_register_data_out); 

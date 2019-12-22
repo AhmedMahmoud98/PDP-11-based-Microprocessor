@@ -43,15 +43,22 @@ ARCHITECTURE address_generator_arch OF address_generator IS
 	
 	SIGNAL bit_oring_addresses: bus_array(bit_orings-1 DOWNTO 0)(control_address_width-1 DOWNTO 0);
 	SIGNAL mux_inputs: bus_array((2 ** selection_line_width) - 1 DOWNTO 0)(control_address_width - 1 DOWNTO 0);
+	SIGNAL SRC_internal_sig: std_logic;
 	CONSTANT bit_oring_0_selector: std_logic_vector(2 DOWNTO 0) := "000";
 	CONSTANT IR_decoder_address_selector: std_logic_vector(2 DOWNTO 0) := "101";
 BEGIN
 	PROCESS(address_selection_lines, SRC_IN, SRC_OUT)
+	VARIABLE SRC_internal: std_logic := SRC_internal_sig;
 	BEGIN
 		IF (address_selection_lines = bit_oring_0_selector) THEN
-			SRC_OUT <= '0';
+			SRC_internal := '0';
+			SRC_internal_sig <= SRC_internal;
 		ELSIF (address_selection_lines = IR_decoder_address_selector) THEN
-			SRC_OUT <= SRC_IN;
+			SRC_internal := SRC_IN;
+			SRC_internal_sig <= SRC_internal;
+			SRC_OUT <= SRC_internal;
+		ELSE
+			SRC_OUT <= SRC_internal;
 		END IF;
 	END PROCESS;
 	b: bit_oring_circuits GENERIC MAP(bus_width => bus_width, control_address_width => control_address_width, bit_orings => bit_orings)
