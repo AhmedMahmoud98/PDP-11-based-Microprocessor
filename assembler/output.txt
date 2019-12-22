@@ -1,23 +1,10 @@
-2 mov X(R7) R0 0
--3 N 1
-2 mov R0 (R7)+ 2
--2 0 3
-2 mov (R7)+ R2 4
--2 514 5
-2 mov (R2)+ X(R7) 6
--3 SMALL 7
-1 dec R0 8
-0 compare 9
-2 cmp X(R7) @R2 9
--3 SMALL 10
-4 bls continue 11
-2 mov @R2 X(R7) 12
--3 SMALL 13
-0 continue 14
-1 dec R0 14
-4 beq finish 15
-1 inc R2 16
-4 br compare 17
-0 finish 18
-5 hlt 18
-0 18
+2 mov (R7)+ R0 0
+-2 514 1
+2 mov (R7)+ @R0 2
+-2 520 3
+2 mov (R7)+ R1 4
+-2 512 5
+2 mov (R7)+ @X(R1) 6
+-2 71 7
+-2 2 8
+5 hlt 9

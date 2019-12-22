@@ -1,0 +1,27 @@
+Mov N,R0
+MOV R0,#0
+Mov #514, R2 
+
+Mov (R2)+, SMALL
+DEC R0
+
+compare:
+CMP SMALL, @R2
+BLS continue
+MOV @R2, SMALL
+
+continue:
+DEC R0
+BEQ finish
+INC R2
+BR compare
+finish: HLT
+Define SMALL 0
+Define N 7
+Define Entries 4
+Define E1 5
+Define E2 3
+Define E3 6
+Define E4 1
+Define E5 8
+Define E6 2
