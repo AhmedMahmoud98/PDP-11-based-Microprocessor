@@ -22,28 +22,28 @@ begin
   process(A,B,Op,sel,Cin)
   begin
     if (sel = "00") then  -- INC
-      ALU_Result <= std_logic_vector(signed('0' & B)+1); 
+      ALU_Result <= std_logic_vector(signed(B(N-1) & B)+1); 
     elsif (sel = "01") then   --DEC
-      ALU_Result <= std_logic_vector(signed('0' & B)-1);
+      ALU_Result <= std_logic_vector(signed(B(N-1) & B)-1);
     elsif (sel = "10") then   --ADD
-      ALU_Result <= std_logic_vector(signed('0' & A)+signed('0' & B)); 
+      ALU_Result <= std_logic_vector(signed(A(N-1) & A)+signed(B(N-1) & B)); 
     else    --operation
       if(Op(opcode-1 downto opcode-2) = "00") then--2 operand
         if (Op(opcode-3 downto 0) = "000") then  -- SUB,CMP
-          ALU_Result <= std_logic_vector(signed('0' & A)-signed('0' & B));
+          ALU_Result <= std_logic_vector(signed(A(N-1) & A)-signed(B(N-1) & B));
         elsif (Op(opcode-3 downto 0) = "001") then  -- ADD
-          ALU_Result <= std_logic_vector(signed('0' & A)+signed('0' & B));
+          ALU_Result <= std_logic_vector(signed(A(N-1) & A)+signed(B(N-1) & B));
         elsif (Op(opcode-3 downto 0) = "010") then  --ADC
           if(Cin = '1') then
-            ALU_Result <= std_logic_vector(signed('0' & A)+signed('0' & B)+1);
+            ALU_Result <= std_logic_vector(signed(A(N-1) & A)+signed(B(N-1) & B)+1);
           else
-            ALU_Result <= std_logic_vector(signed('0' & A)+signed('0' & B));
+            ALU_Result <= std_logic_vector(signed(A(N-1) & A)+signed(B(N-1) & B));
           end if;
         elsif (Op(opcode-3 downto 0) = "011") then --SBC
           if(Cin = '1') then
-            ALU_Result <= std_logic_vector(signed('0' & A)-signed('0' & B)-1);
+            ALU_Result <= std_logic_vector(signed(A(N-1) & A)-signed(B(N-1) & B)-1);
           else
-            ALU_Result <= std_logic_vector(signed('0' & A)-signed('0' & B));
+            ALU_Result <= std_logic_vector(signed(A(N-1) & A)-signed(B(N-1) & B));
           end if;
         elsif (Op(opcode-3 downto 0) = "100") then  --and 
           ALU_Result(N-1 downto 0) <= A and B;
