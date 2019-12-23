@@ -57,7 +57,7 @@ ARCHITECTURE CPU_arch OF CPU IS
 			zero_flag, carry_flag : IN std_logic;
 			address : OUT std_logic_vector(4 DOWNTO 0);
 			Rsrc, Rdst : OUT std_logic_vector(2 DOWNTO 0);
-			is_mov, is_cmp, is_src : OUT std_logic;
+			is_mov, is_cmp, is_src, is_hlt : OUT std_logic;
 			alu_opcode : OUT std_logic_vector(4 DOWNTO 0)
 		);
 	END COMPONENT;
@@ -84,6 +84,7 @@ ARCHITECTURE CPU_arch OF CPU IS
 			RAM_size : INTEGER := 10);
 		PORT (
 			CLK, WR : IN std_logic;
+			writer_indicator : IN std_logic;
 			address : IN std_logic_vector(address_width - 1 DOWNTO 0);
 			data_in : IN std_logic_vector(word_size - 1 DOWNTO 0);
 			data_out : OUT std_logic_vector(word_size - 1 DOWNTO 0));
@@ -141,7 +142,7 @@ ARCHITECTURE CPU_arch OF CPU IS
 	SIGNAL zero_flag, carry_flag : std_logic;
 	SIGNAL MAR_data, MDR_data, IR_data, memory_to_MDR, Y_data, Z_data : std_logic_vector(bus_width - 1 DOWNTO 0);
 	SIGNAL alu_opcode : std_logic_vector(4 DOWNTO 0);
-	SIGNAL is_SRC_to_address_generator, is_SRC, is_MOV, is_CMP, write_to_register_enable, read_from_register_enable : std_logic;
+	SIGNAL is_SRC_to_address_generator, is_SRC, is_MOV, is_CMP, is_HLT, write_to_register_enable, read_from_register_enable : std_logic;
 	SIGNAL read_from_selection_line, write_to_selection_line : std_logic_vector(selection_line_width - 1 DOWNTO 0);
 	SIGNAL flag_register_data : std_logic_vector(4 DOWNTO 0);
 	SIGNAL R_src, R_dst : std_logic_vector(2 DOWNTO 0);
@@ -187,7 +188,7 @@ BEGIN
 		zero_flag, carry_flag,
 		wide_branch_address,
 		R_src, R_dst,
-		is_MOV, is_CMP, is_SRC_to_address_generator,
+		is_MOV, is_CMP, is_SRC_to_address_generator, is_HLT,
 		alu_opcode
 	);
 
@@ -216,6 +217,7 @@ BEGIN
 		address_width => bus_width,
 		RAM_size => 2048) PORT MAP(
 		CLK, WR,
+		is_HLT,
 		MAR_data,
 		MDR_data,
 		memory_to_MDR

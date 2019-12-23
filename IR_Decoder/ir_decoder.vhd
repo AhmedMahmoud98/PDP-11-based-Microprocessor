@@ -9,7 +9,7 @@ ENTITY ir_decoder IS
 		zero_flag, carry_flag : IN std_logic;
 		address : OUT std_logic_vector(4 DOWNTO 0);
 		Rsrc, Rdst : OUT std_logic_vector(2 DOWNTO 0);
-		is_mov, is_cmp, is_src : OUT std_logic;
+		is_mov, is_cmp, is_src, is_hlt : OUT std_logic;
 		alu_opcode : OUT std_logic_vector(4 DOWNTO 0)
 	);
 END ir_decoder;
@@ -43,7 +43,7 @@ ARCHITECTURE ir_decoder_operation OF ir_decoder IS
 	END COMPONENT;
 	SIGNAL branch_address_output, address_mode_output : std_logic_vector(address_width - 1 DOWNTO 0);
 	SIGNAL address_mode : std_logic_vector(2 DOWNTO 0);
-	SIGNAL is_clr, hlt_nop, is_hlt, is_nop, is_1_op, is_2_op, is_branch : std_logic;
+	SIGNAL is_clr, hlt_nop, is_nop, is_1_op, is_2_op, is_branch : std_logic;
 BEGIN
 	hlt_nop <= IR(15) AND IR(14) AND NOT IR(13) AND NOT IR(13);
 	is_nop <= hlt_nop AND NOT IR(11);

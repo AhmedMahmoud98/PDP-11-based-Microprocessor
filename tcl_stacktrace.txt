@@ -1,0 +1,52 @@
+Mon Dec 23 12:53:37 CAT 2019
+Trace back: can't read "Project(EchoCompileOutput)": no such element in array
+    while executing
+"lappend ProjectWriteArgs	$Project(EchoCompileOutput)"
+    (procedure "Project::saveProjectSpecificSettings" line 26)
+    invoked from within
+"Project::saveProjectSpecificSettings"
+    (procedure "quit" line 58)
+    invoked from within
+"quit"
+    (command for "WM_DELETE_WINDOW" window manager protocol)
+  <2:C:/intelFPGA/18.1/modelsim_ase/win32aloem/tk8.5/bgerror.tcl:92: ::tkerror {can't read "Project(EchoCompileOutput)": no such element in array}
+  <1:proc:137: ::tk::dialog::error::bgerror {can't read "Project(EchoCompileOutput)": no such element in array}
+Mon Dec 23 12:54:26 CAT 2019
+Trace back: can't read "Project(SaveCompileReport)": no such element in array
+    while executing
+"if { $Project(SaveCompileReport) } {
+			Project::saveCompileReport
+		}"
+    (procedure "Project::unload" line 20)
+    invoked from within
+"Project::unload"
+    (procedure "Project::checkCloseCurrentProject" line 24)
+    invoked from within
+"Project::checkCloseCurrentProject"
+    (procedure "Project::openSingleFile" line 29)
+    invoked from within
+"Project::openSingleFile $arg"
+    (procedure "OpenFile" line 3)
+    invoked from within
+"OpenFile $file"
+    (procedure "DroppedFileAction" line 20)
+    invoked from within
+"DroppedFileAction $uri(path) $source $x $y"
+    (procedure "Transcript::DroppedFile" line 19)
+    invoked from within
+"Transcript::DroppedFile "text/uri-list" "[::dnd::ConvertToBinary C:/Users/Ahmed/Desktop/PDP-11-based-Microprocessor/PDP-11.mpf]" 152 151"
+  <2:C:/intelFPGA/18.1/modelsim_ase/win32aloem/tk8.5/bgerror.tcl:92: ::tkerror {can't read "Project(SaveCompileReport)": no such element in array}
+  <1:eval:1: ::tk::dialog::error::bgerror {can't read "Project(SaveCompileReport)": no such element in array}
+Mon Dec 23 12:56:58 CAT 2019
+Trace back: can't read "Project(EchoCompileOutput)": no such element in array
+    while executing
+"lappend ProjectWriteArgs	$Project(EchoCompileOutput)"
+    (procedure "Project::saveProjectSpecificSettings" line 26)
+    invoked from within
+"Project::saveProjectSpecificSettings"
+    (procedure "quit" line 58)
+    invoked from within
+"quit"
+    (command for "WM_DELETE_WINDOW" window manager protocol)
+  <2:C:/intelFPGA/18.1/modelsim_ase/win32aloem/tk8.5/bgerror.tcl:92: ::tkerror {can't read "Project(EchoCompileOutput)": no such element in array}
+  <1:proc:137: ::tk::dialog::error::bgerror {can't read "Project(EchoCompileOutput)": no such element in array}
